@@ -6,3 +6,6 @@ output/codes.pkl
 output/docs.pkl
 output/entities.pkl
 output/texts.pkl
+output/_keys.pkl
+output/_codes.pkl
+output/_entities.pkl
