@@ -14,9 +14,8 @@ def loadG(path):
 def addTexts2G(G:nx.Graph,texts):
     for i,text in enumerate(texts):
         name = 'text_%08d' % i
+        print('Add Node <%s>' % name)
         G.add_node(name,text = text)
-    pass
-
 
 if __name__ == "__main__":
     baseDir = 'C:/Users/croxx/Desktop/rcv1'
