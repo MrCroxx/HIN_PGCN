@@ -1,3 +1,8 @@
 data.tgz
 .vscode/settings.json
 files/google_knowledge_graph_api.key
+output/keys.pkl
+output/codes.pkl
+output/docs.pkl
+output/entities.pkl
+output/texts.pkl
