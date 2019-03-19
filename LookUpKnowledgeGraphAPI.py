@@ -45,9 +45,6 @@ def lookup(args):
 if __name__ == "__main__":
     # baseDir = 'D:/Lab/HIN_PGCN'
     baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
-    api_key = open(os.path.join('D:/Lab/HIN_PGCN', 'files',
-                                'google_knowledge_graph_api.key')).read()
-    # print(lookup(('apple',api_key)))
 
     api_key = open(os.path.join(baseDir, 'files',
                                 'google_knowledge_graph_api.key')).read()
