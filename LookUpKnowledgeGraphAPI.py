@@ -23,9 +23,9 @@ def lookup(args):
         'https': 'socks5//10.111.2.130:1080'
     }
     ans = []
-    # res = requests.get(service_url, params=params, proxies=proxies)
     try:
-        res = requests.get(service_url, params=params)
+        res = requests.get(service_url, params=params, proxies=proxies)
+        # res = requests.get(service_url, params=params)
         if res.status_code != 200:
             print('Fail')
             return query
