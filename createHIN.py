@@ -19,7 +19,7 @@ def addTexts2G(G:nx.Graph,texts):
 
 if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
-    baseDir = '/home/LAB/penghao/croxx/HIN'
+    baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
     print('Loading texts...')
     texts = pickle.load(open(os.path.join(baseDir,'output','texts.pkl'),'rb'))
     print('Loading keys...')
