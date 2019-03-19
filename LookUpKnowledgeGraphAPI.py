@@ -24,8 +24,8 @@ def lookup(args):
     }
     ans = []
     try:
-        res = requests.get(service_url, params=params, proxies=proxies)
-        # res = requests.get(service_url, params=params)
+        # res = requests.get(service_url, params=params, proxies=proxies)
+        res = requests.get(service_url, params=params)
         if res.status_code != 200:
             print('Fail')
             return query
