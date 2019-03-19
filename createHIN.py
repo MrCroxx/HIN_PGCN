@@ -15,6 +15,7 @@ def addTexts2G(G:nx.Graph,texts):
     for i,text in enumerate(texts):
         name = 'text_%08d' % i
         G.add_node(name,text = text)
+    pass
 
 
 if __name__ == "__main__":
