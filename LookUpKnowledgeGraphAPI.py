@@ -9,6 +9,7 @@ import requests
 
 def lookup(args):
     query, api_key = args
+    print('Looking up <%s>...' % (query,))
     service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
     params = {
         'query': query,
