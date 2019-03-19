@@ -3,8 +3,8 @@ import os.path
 import pickle
 
 if __name__ == "__main__":
-    baseDir = 'D:/Lab/HIN_PGCN'
-    # baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
+    # baseDir = 'D:/Lab/HIN_PGCN'
+    baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
 
     keys = {}
     entities = {}
