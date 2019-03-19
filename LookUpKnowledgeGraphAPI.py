@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     api_key = open(os.path.join(baseDir, 'files',
                                 'google_knowledge_graph_api.key')).read()
-    executor = ThreadPoolExecutor(max_workers=8)
+    executor = ThreadPoolExecutor(max_workers=100)
     ens = pickle.load(
         open(os.path.join(baseDir, 'output', '_entities.pkl'), 'rb'))
     tasks = [executor.submit(lookup, args=(k, api_key)) for k, v in ens.keys()]
