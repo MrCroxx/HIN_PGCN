@@ -40,6 +40,6 @@ if __name__ == "__main__":
             codes[code].append(i)
 
     pickle.dump(keys,open(os.path.join(baseDir,'output','_keys.pkl'),'wb'))
-    pickle.dump(entities,open(os.path.join(baseDir,'output','_entitis.pkl'),'wb'))
+    pickle.dump(entities,open(os.path.join(baseDir,'output','_entities.pkl'),'wb'))
     pickle.dump(codes,open(os.path.join(baseDir,'output','_codes.pkl'),'wb'))
     
