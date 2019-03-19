@@ -21,19 +21,19 @@ if __name__ == "__main__":
     for i,key in enumerate(keys_raw):
         print('Processing key %s...' % i)
         if key not in keys:
-            keys[key] = []
+            keys[key] = set()
         keys[key].append(i)
 
     for i,entity in enumerate(entities_raw):        
         print('Processing entity %s...' % i)
         if entity not in entities:
-            entities[entity] = []
+            entities[entity] = set()
         entities[entity].append(i)
 
     for i,code in enumerate(codes_raw):
         print('Processing code %s...' % i)
         if code not in codes:
-            codes[code] = []
+            codes[code] = set()
         codes[code].append(i)
 
     pickle.dump(keys,open(os.path.join(baseDir,'output','_keys.pkl'),'wb'))
