@@ -24,8 +24,8 @@ def lookup(args):
     }
     ans = []
     try:
-        # res = requests.get(service_url, params=params, proxies=proxies)
-        res = requests.get(service_url, params=params)
+        res = requests.get(service_url, params=params, proxies=proxies)
+        # res = requests.get(service_url, params=params)
         if res.status_code != 200:
             print('Fail')
             return query
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     api_key = open(os.path.join(baseDir, 'files',
                                 'google_knowledge_graph_api.key')).read()
-    executor = ThreadPoolExecutor(max_workers=100)
+    executor = ThreadPoolExecutor(max_workers=10)
     ens = pickle.load(
         open(os.path.join(baseDir, 'output', '_entities.pkl'), 'rb'))
     tasks = [executor.submit(lookup, args=(k, api_key)) for k, v in ens.keys()]
