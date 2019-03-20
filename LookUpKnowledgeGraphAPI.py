@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     api_key = open(os.path.join(baseDir, 'files',
                                 'google_knowledge_graph_api.key')).read()
-    executor = ThreadPoolExecutor(max_workers=100)
+    executor = ThreadPoolExecutor(max_workers=30)
     ens = pickle.load(
         open(os.path.join(baseDir, 'output', '_entities.pkl'), 'rb'))
     
