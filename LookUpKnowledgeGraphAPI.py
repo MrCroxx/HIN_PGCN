@@ -20,7 +20,7 @@ def lookup(args):
     }
     proxies = {
         "http": "socks5://10.111.2.130:1080",
-        'https': 'socks5//10.111.2.130:1080'
+        'https': 'socks5://10.111.2.130:1080'
     }
     ans = []
     try:
