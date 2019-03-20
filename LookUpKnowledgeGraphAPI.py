@@ -10,6 +10,8 @@ import requests
 
 def lookup(args):
     query, api_key = args
+    if os.path.exists('/home/LAB/penghao/croxx/HIN_PGCN/output/rels/%s' % query):
+        return None
     # print('Looking up <%s>...' % (query,))
     service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
     params = {
@@ -39,6 +41,7 @@ def lookup(args):
     except:
         print('Fail')
         return query
+    pickle.dump(ans,open('/home/LAB/penghao/croxx/HIN_PGCN/output/rels/%s' % query,'wb'))
     return ans
 
 
@@ -51,22 +54,11 @@ if __name__ == "__main__":
     executor = ThreadPoolExecutor(max_workers=10)
     ens = pickle.load(
         open(os.path.join(baseDir, 'output', '_entities.pkl'), 'rb'))
-    tasks = [executor.submit(lookup, args=(k, api_key)) for k, v in ens.keys()]
-    rels = [task.result() for task in as_completed(tasks)]
-    t = 0
-    while True:
-        t += 1
-        cs = []
-        print('Checking... ...')
-        ok = 0
-        for i,rel in enumerate(rels):
-            if isinstance(rel,str):
-                ok += 1
-                cs.append(rel)
-                rels[i] = lookup((rel,api_key))
-        print('<%s> remains None, restarting...' % ok)
-        pickle.dump(cs, open(os.path.join(baseDir, 'log', 'cs%03d.pkl' % t), 'wb'))
-        if ok==0:
-            break
+    
+    # tasks = [executor.submit(lookup, args=(k, api_key)) for k, v in ens.keys()]
+    # rels = [task.result() for task in as_completed(tasks)]
 
-    pickle.dump(ens, open(os.path.join(baseDir, 'output', '_rels.pkl'), 'wb'))
+    for k, v in ens.keys():
+        executor.submit(lookup, args=(k, api_key))
+    executor.shutdown(wait=True)
+    
