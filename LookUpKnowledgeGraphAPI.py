@@ -74,7 +74,7 @@ def lookup(args):
         print('Fail')
         return query
     pickle.dump(
-        ans, open('/home/LAB/penghao/croxx/HIN_PGCN/output/rels/%s' % query, 'wb'))
+        ans, open('/home/LAB/penghao/croxx/HIN_PGCN/output/dbpedia/%s' % query, 'wb'))
     return ans
 
 
