@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 
-
+'''
 def lookup(args):
     query, api_key = args
     if os.path.exists('/home/LAB/penghao/croxx/HIN_PGCN/output/rels/%s' % query):
@@ -43,6 +43,39 @@ def lookup(args):
         return query
     pickle.dump(ans,open('/home/LAB/penghao/croxx/HIN_PGCN/output/rels/%s' % query,'wb'))
     return ans
+'''
+
+
+def lookup(args):
+    query, api_key = args
+    if os.path.exists('/home/LAB/penghao/croxx/HIN_PGCN/output/dbpedia/%s' % query):
+        return None
+    url = 'http://lookup.dbpedia.org/api/search/KeywordSearch'
+    headers = {
+        'Accept': 'application/json'
+    }
+    params = {
+        'QueryString': query,
+        'QueryClass': '',
+        'MaxHits': 100
+    }
+    ans = []
+    try:
+        res = requests.get(url, headers=headers, params=params)
+        if res.status_code != 200:
+            print('Fail')
+            return query
+        j = json.loads(res.text)
+
+        for r in j['results'][1:]:
+            ans.append(r['label'])
+        print('Lookup <%s> gets <%d> rels.' % (query, len(ans)))
+    except:
+        print('Fail')
+        return query
+    pickle.dump(
+        ans, open('/home/LAB/penghao/croxx/HIN_PGCN/output/rels/%s' % query, 'wb'))
+    return ans
 
 
 if __name__ == "__main__":
@@ -54,11 +87,10 @@ if __name__ == "__main__":
     executor = ThreadPoolExecutor(max_workers=30)
     ens = pickle.load(
         open(os.path.join(baseDir, 'output', '_entities.pkl'), 'rb'))
-    
+
     # tasks = [executor.submit(lookup, args=(k, api_key)) for k, v in ens.keys()]
     # rels = [task.result() for task in as_completed(tasks)]
 
     for k, v in ens.keys():
         executor.submit(lookup, args=(k, api_key))
     executor.shutdown(wait=True)
-    
