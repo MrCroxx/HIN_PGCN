@@ -48,6 +48,7 @@ def lookup(args):
 
 def lookup(args):
     query, api_key = args
+    query = query.replace('/','_')
     if os.path.exists('/home/LAB/penghao/croxx/HIN_PGCN/output/dbpedia/%s' % query):
         return None
     url = 'http://lookup.dbpedia.org/api/search/KeywordSearch'
