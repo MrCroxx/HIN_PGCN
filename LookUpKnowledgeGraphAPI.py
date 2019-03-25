@@ -48,7 +48,7 @@ def lookup(args):
 
 def lookup(args):
     query, api_key = args
-    query = query.replace('/','_')
+    query = query.replace('/', '_')
     if os.path.exists('/home/LAB/penghao/croxx/HIN_PGCN/output/dbpedia/%s' % query):
         return None
     url = 'http://lookup.dbpedia.org/api/search/KeywordSearch'
@@ -78,7 +78,8 @@ def lookup(args):
         ans, open('/home/LAB/penghao/croxx/HIN_PGCN/output/dbpedia/%s' % query, 'wb'))
     return ans
 
-def look(baseDir,api_key):
+
+def look(baseDir, api_key):
     executor = ThreadPoolExecutor(max_workers=100)
     ens = pickle.load(
         open(os.path.join(baseDir, 'output', '_entities.pkl'), 'rb'))
@@ -90,13 +91,17 @@ def look(baseDir,api_key):
         executor.submit(lookup, args=(k, api_key))
     executor.shutdown(wait=True)
 
+
 def combine(baseDir):
-    files = os.listdir(os.path.join(baseDir,'output','dbpedia'))
+    files = os.listdir(os.path.join(baseDir, 'output', 'dbpedia'))
     rels = {}
-    for file in files:
-        rel = pickle.load(open(os.path.join(baseDir,'output','dbpedia',file),'rb'))
+    total = len(files)
+    for i, file in enumerate(files):
+        print('Combining < %s , %s >...' % (i, total))
+        rel = pickle.load(
+            open(os.path.join(baseDir, 'output', 'dbpedia', file), 'rb'))
         rels[file] = rel
-    pickle.dump(rels,open(os.path.join(baseDir,'output','rels.pkl'),'wb'))
+    pickle.dump(rels, open(os.path.join(baseDir, 'output', 'rels.pkl'), 'wb'))
 
 
 if __name__ == "__main__":
@@ -107,5 +112,3 @@ if __name__ == "__main__":
                                 'google_knowledge_graph_api.key')).read()
     # look(baseDir,api_key)
     combine(baseDir)
-
-    
