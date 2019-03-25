@@ -78,13 +78,7 @@ def lookup(args):
         ans, open('/home/LAB/penghao/croxx/HIN_PGCN/output/dbpedia/%s' % query, 'wb'))
     return ans
 
-
-if __name__ == "__main__":
-    # baseDir = 'D:/Lab/HIN_PGCN'
-    baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
-
-    api_key = open(os.path.join(baseDir, 'files',
-                                'google_knowledge_graph_api.key')).read()
+def look(baseDir,api_key):
     executor = ThreadPoolExecutor(max_workers=100)
     ens = pickle.load(
         open(os.path.join(baseDir, 'output', '_entities.pkl'), 'rb'))
@@ -95,3 +89,23 @@ if __name__ == "__main__":
     for k, v in ens.keys():
         executor.submit(lookup, args=(k, api_key))
     executor.shutdown(wait=True)
+
+def combine(baseDir):
+    files = os.listdir(os.path.join(baseDir,'output','dbpedia'))
+    rels = {}
+    for file in files:
+        rel = pickle.load(open(os.path.join(baseDir,'output','dbpedia',file),'rb'))
+        rels[file] = rel
+    pickle.dump(rels,open(os.path.join(baseDir,'output','rels.pkl'),'wb'))
+
+
+if __name__ == "__main__":
+    # baseDir = 'D:/Lab/HIN_PGCN'
+    baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
+
+    api_key = open(os.path.join(baseDir, 'files',
+                                'google_knowledge_graph_api.key')).read()
+    # look(baseDir,api_key)
+    combine(baseDir)
+
+    
