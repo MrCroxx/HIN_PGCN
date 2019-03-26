@@ -55,11 +55,11 @@ if __name__ == "__main__":
     print('Loading _entities...')
     _entities = pickle.load(open(os.path.join(baseDir,'output','_entities.pkl'),'rb'))
     print('Loading rels...')
-    rels = pickle.load(open(os.path.join(baseDir,'output','rels.pkl')))
+    rels = pickle.load(open(os.path.join(baseDir,'output','rels.pkl'),'rb'))
 
     G = nx.Graph()
     addTexts2G(G,texts)
     addEntities2G(G,_entities.keys())
     addKeywords2G(G,_keys.keys())
-    connectTextwithKeyword(G._keys)
+    connectTextwithKeyword(G,_keys)
       
