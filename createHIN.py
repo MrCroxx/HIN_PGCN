@@ -59,8 +59,9 @@ def findNext(G,n,pp,pn):
     if len(pn) == 0:
         return True
     for node in G.adj[n]:
-        if G.nodes[node]['type'] == pn[0] and node not in pp:
-            return findNext(G,node,pp + [node],pn[1:])
+        if 'type' in G.nodes[node]:
+            if G.nodes[node]['type'] == pn[0] and node not in pp:
+                return findNext(G,node,pp + [node],pn[1:])
     return False
         
 
