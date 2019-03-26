@@ -4,6 +4,7 @@ import pickle
 
 import networkx as nx
 import nltk
+from nltk.corpus import wordnet as wn
 
 
 def saveG(graph,path):
@@ -54,8 +55,6 @@ def connectTextwithEntity(G:nx.Graph,_entities):
             G.add_edge(name_e,name_t)
             print('Add Edge < %s , %s >...' % (name_e,name_t))
 
-def connectEntitywithEntity(G:nx.Graph,entities):
-    pass
 
 if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
@@ -68,7 +67,7 @@ if __name__ == "__main__":
     _entities = pickle.load(open(os.path.join(baseDir,'output','_entities.pkl'),'rb'))
     print('Loading rels...')
     rels = pickle.load(open(os.path.join(baseDir,'output','rels.pkl'),'rb'))
-
+    '''
     G = nx.Graph()
     addTexts2G(G,texts)
     addEntities2G(G,_entities.keys())
@@ -76,5 +75,21 @@ if __name__ == "__main__":
     connectTextwithKeyword(G,_keys)
     connectTextwithEntity(G,_entities)
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'wb'))
+    '''
+    G = pickle.load(open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'rb'))
+    es = set()
+    for e in _entities.keys():
+        es.add(e[0])
+    for e,rs in rels.items():
+        for r in rs:
+            if r in es:
+                G.add_edge(nameN(e,'entity'),nameN((r,None),'entity'))
+            if r.lower() in _keys:
+                G.add_edge(nameN(e,'entity'),nameN(r.lower(),'keyword'))
     
-      
+    for key in _keys.keys():
+        for synset in wn.synsets(key):
+            for word in synset.lemma_names():
+                if word.lower() != key and word.lower() in _keys:
+                    G.add_edge(nameN(key,'keyword'),nameN(word.lower(),'keyword'))
+    pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'wb'))
