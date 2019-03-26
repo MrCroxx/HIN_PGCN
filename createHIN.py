@@ -78,7 +78,7 @@ def findPath(G, p):
     for s in G.nodes:
         if ans is not None:
             return ans
-        if G.nodes[s]['type'] == 'text':
+        if 'type' in G.nodes[s] and G.nodes[s]['type'] == 'text':
             ans = findNext(G, s, [s], p[1:])
     return ans
 
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     connectTextwithKeyword(G,_keys)
     connectTextwithEntity(G,_entities)
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'wb'))
-    
+    '''
     '''
     G = pickle.load(open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'rb'))
     es = set()
@@ -114,21 +114,20 @@ if __name__ == "__main__":
         for r in rs:
             if r in es:
                 print('Add Edge < %s , %s >' % (nameN(e,'entity'),nameN((r,None),'entity')))
-                print(nameN(e,'entity') in G.nodes,nameN((r,None),'entity') in G.nodes)
                 G.add_edge(nameN(e,'entity'),nameN((r,None),'entity'))
             if r.lower() in _keys:
-                # print('Add Edge < %s , %s >' % (nameN(e,'entity'),nameN(r.lower(),'keyword')))
+                print('Add Edge < %s , %s >' % (nameN(e,'entity'),nameN(r.lower(),'keyword')))
                 G.add_edge(nameN(e,'entity'),nameN(r.lower(),'keyword'))
     
     for key in _keys.keys():
         for synset in wn.synsets(key):
             for word in synset.lemma_names():
                 if word.lower() != key and word.lower() in _keys:
-                    # print('Add Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
+                    print('Add Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
                     G.add_edge(nameN(key,'keyword'),nameN(word.lower(),'keyword'))
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'wb'))
-    
     '''
+    
     ps = {}
     paths = [['text', 'entity', 'text'], ['text', 'keyword', 'text'], ['text', 'entity', 'entity', 'text'], ['text', 'entity', 'keyword', 'text'], ['text', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'text'], ['text', 'entity', 'entity', 'entity', 'text'], ['text', 'entity', 'entity', 'keyword', 'text'], [
         'text', 'entity', 'keyword', 'entity', 'text'], ['text', 'entity', 'keyword', 'keyword', 'text'], ['text', 'keyword', 'entity', 'entity', 'text'], ['text', 'keyword', 'entity', 'keyword', 'text'], ['text', 'keyword', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'keyword', 'text']]
@@ -142,4 +141,4 @@ if __name__ == "__main__":
             ps[str(p)] = ans
     pickle.dump(ps, open(os.path.join(
         baseDir, 'output', 'matepaths.pkl'), 'rb'))
-    '''
+    
