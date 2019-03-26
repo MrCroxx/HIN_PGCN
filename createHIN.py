@@ -83,13 +83,16 @@ if __name__ == "__main__":
     for e,rs in rels.items():
         for r in rs:
             if r in es:
+                print('Add Edge < %s , %s >' % (nameN(e,'entity'),nameN((r,None),'entity')))
                 G.add_edge(nameN(e,'entity'),nameN((r,None),'entity'))
             if r.lower() in _keys:
+                print('Add Edge < %s , %s >' % (nameN(e,'entity'),nameN(r.lower(),'keyword')))
                 G.add_edge(nameN(e,'entity'),nameN(r.lower(),'keyword'))
     
     for key in _keys.keys():
         for synset in wn.synsets(key):
             for word in synset.lemma_names():
                 if word.lower() != key and word.lower() in _keys:
+                    print('Add Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword'))))
                     G.add_edge(nameN(key,'keyword'),nameN(word.lower(),'keyword'))
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'wb'))
