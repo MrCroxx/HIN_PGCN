@@ -3,6 +3,7 @@ import os.path
 import pickle
 
 import networkx as nx
+import nltk
 
 
 def saveG(graph,path):
@@ -45,6 +46,17 @@ def connectTextwithKeyword(G:nx.Graph,_keys):
             G.add_edge(name_k,name_t)
             print('Add Edge < %s , %s >...' % (name_k,name_t))
 
+def connectTextwithEntity(G:nx.Graph,_entities):
+    for e,ts in _entities.items():
+        name_e = nameN(e,'entity')
+        for t in ts:
+            name_t = nameN(t,'text')
+            G.add_edge(name_e,name_t)
+            print('Add Edge < %s , %s >...' % (name_e,name_t))
+
+def connectEntitywithEntity(G:nx.Graph,entities):
+    pass
+
 if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
     baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
@@ -62,4 +74,7 @@ if __name__ == "__main__":
     addEntities2G(G,_entities.keys())
     addKeywords2G(G,_keys.keys())
     connectTextwithKeyword(G,_keys)
+    connectTextwithEntity(G,_entities)
+    pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'wb'))
+    
       
