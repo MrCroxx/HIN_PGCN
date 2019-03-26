@@ -86,7 +86,7 @@ def findPath(G, p):
 if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
     baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
-    
+    '''
     print('Loading texts...')
     texts = pickle.load(open(os.path.join(baseDir,'output','texts.pkl'),'rb'))
     print('Loading _keys...')
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     _entities = pickle.load(open(os.path.join(baseDir,'output','_entities.pkl'),'rb'))
     print('Loading rels...')
     rels = pickle.load(open(os.path.join(baseDir,'output','rels.pkl'),'rb'))
-    
+    '''
     '''
     G = nx.Graph()
     addTexts2G(G,texts)
