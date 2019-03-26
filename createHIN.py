@@ -93,6 +93,6 @@ if __name__ == "__main__":
         for synset in wn.synsets(key):
             for word in synset.lemma_names():
                 if word.lower() != key and word.lower() in _keys:
-                    print('Add Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword'))))
+                    print('Add Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
                     G.add_edge(nameN(key,'keyword'),nameN(word.lower(),'keyword'))
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'wb'))
