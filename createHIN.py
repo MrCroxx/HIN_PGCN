@@ -58,7 +58,7 @@ def connectTextwithEntity(G:nx.Graph,_entities):
 def findNext(G,n,pp,pn):
     if len(pn) == 0:
         return True
-    for node in G.adj(n):
+    for node in G.adj[n]:
         if G.nodes[node]['type'] == pn[0] and node not in pp:
             return findNext(G,node,pp + [node],pn[1:])
     return False
@@ -121,6 +121,7 @@ if __name__ == "__main__":
     paths = [['text', 'entity', 'text'], ['text', 'keyword', 'text'], ['text', 'entity', 'entity', 'text'], ['text', 'entity', 'keyword', 'text'], ['text', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'text'], ['text', 'entity', 'entity', 'entity', 'text'], ['text', 'entity', 'entity', 'keyword', 'text'], ['text', 'entity', 'keyword', 'entity', 'text'], ['text', 'entity', 'keyword', 'keyword', 'text'], ['text', 'keyword', 'entity', 'entity', 'text'], ['text', 'keyword', 'entity', 'keyword', 'text'], ['text', 'keyword', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'keyword', 'text']]
     G = pickle.load(open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'rb'))
     for p in paths:
+        print('Finding Path : ',p,' ...')
         if findPath(G,p):
             print('Path Found : ', p )
             ps.append(p)
