@@ -55,6 +55,23 @@ def connectTextwithEntity(G:nx.Graph,_entities):
             G.add_edge(name_e,name_t)
             print('Add Edge < %s , %s >...' % (name_e,name_t))
 
+def findNext(G,n,pp,pn):
+    if len(pn) == 0:
+        return True
+    for node in G.adj(n):
+        if node['type'] == pn[0] and node not in pp:
+            return findNext(G,node,pp + [node],pn[1:])
+    return False
+        
+
+def findPath(G,p):
+    flag = False
+    for s in G.nodes():
+        if flag:
+            return True
+        if s['type'] == 'text':
+            flag = findNext(G,s,[s],p[1:])
+    return flag
 
 if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
@@ -76,6 +93,7 @@ if __name__ == "__main__":
     connectTextwithEntity(G,_entities)
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'wb'))
     '''
+    '''
     G = pickle.load(open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'rb'))
     es = set()
     for e in _entities.keys():
@@ -96,3 +114,12 @@ if __name__ == "__main__":
                     print('Add Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
                     G.add_edge(nameN(key,'keyword'),nameN(word.lower(),'keyword'))
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'wb'))
+    '''
+    ps = []
+    paths = [['text', 'entity', 'text'], ['text', 'keyword', 'text'], ['text', 'entity', 'entity', 'text'], ['text', 'entity', 'keyword', 'text'], ['text', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'text'], ['text', 'entity', 'entity', 'entity', 'text'], ['text', 'entity', 'entity', 'keyword', 'text'], ['text', 'entity', 'keyword', 'entity', 'text'], ['text', 'entity', 'keyword', 'keyword', 'text'], ['text', 'keyword', 'entity', 'entity', 'text'], ['text', 'keyword', 'entity', 'keyword', 'text'], ['text', 'keyword', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'keyword', 'text']]
+    G = pickle.load(open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'rb'))
+    for p in paths:
+        if findPath(G,p):
+            print('Path Found : ', p )
+            ps.append(p)
+    pickle.dump(ps,open(os.path.join(baseDir,'output','matepaths.pkl'),'rb'))
