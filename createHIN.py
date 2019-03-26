@@ -137,6 +137,6 @@ if __name__ == "__main__":
         ans = findPath(G, p)
         if ans is not None:
             print('Path Found : ', p, '\n', '------->', ans)
-            ps[p] = ans
+            ps[str(p)] = ans
     pickle.dump(ps, open(os.path.join(
         baseDir, 'output', 'matepaths.pkl'), 'rb'))
