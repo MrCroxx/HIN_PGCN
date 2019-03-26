@@ -23,19 +23,19 @@ def addTexts2G(G:nx.Graph,texts):
     for i,text in enumerate(texts):
         name = nameN(i,'text')
         print('Add Node <%s>' % name)
-        G.add_node(name,text = text)
+        G.add_node(name,type = 'text',text = text)
 
 def addEntities2G(G:nx.Graph,entities):
     for entity in entities:
         name = nameN(entity,'entity')
         print('Add None <%s>' % name)
-        G.add_node(name,entity)
+        G.add_node(name,type = 'entity',entity = entity)
 
 def addKeywords2G(G:nx.Graph,keywords):
     for keyword in keywords:
         name = nameN(keyword,'keyword')
         print('Add None <%s>' % name)
-        G.add_node(name,keyword)
+        G.add_node(name,type = 'keyword',keyword = keyword)
     
 def connectTextwithKeyword(G:nx.Graph,_keys):
     for k,ts in _keys.items():
