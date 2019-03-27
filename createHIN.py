@@ -57,7 +57,7 @@ def connectTextwithKeyword(G: nx.Graph, _keys):
 def connectTextwithEntity(G: nx.Graph, _entities):
     for e, ts in _entities.items():
         name_e = nameN(e, 'entity')
-        for t in ts:n
+        for t in ts:
             name_t = nameN(t, 'text')
             G.add_edge(name_e, name_t)
             print('Add Edge < %s , %s >...' % (name_e, name_t))
