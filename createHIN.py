@@ -67,9 +67,8 @@ def findNext(G, n, pp, pn):
     if len(pn) == 0:
         return pp
     for node in G.adj[n]:
-        if 'type' in G.nodes[node]:
-            if G.nodes[node]['type'] == pn[0] and node not in pp:
-                return findNext(G, node, pp + [node], pn[1:])
+        if node[:2] == pn[0][:2] and node not in pp:
+            return findNext(G, node, pp + [node], pn[1:])
     return None
 
 
@@ -78,7 +77,7 @@ def findPath(G, p):
     for s in G.nodes:
         if ans is not None:
             return ans
-        if 'type' in G.nodes[s] and G.nodes[s]['type'] == 'text':
+        if s[:2] == 'te':
             ans = findNext(G, s, [s], p[1:])
     return ans
 
