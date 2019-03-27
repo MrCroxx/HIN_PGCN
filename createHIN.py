@@ -135,7 +135,7 @@ if __name__ == "__main__":
                         print('Add Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
                         G.add_edge(nameN(key,'keyword'),nameN(word.lower(),'keyword'))
                     else:
-                        print('No Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword'))
+                        print('No Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'wb'))
     
     '''
