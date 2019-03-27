@@ -85,7 +85,7 @@ def findPath(G, p):
 if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
     baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
-    '''
+    
     print('Loading texts...')
     texts = pickle.load(open(os.path.join(baseDir,'output','texts.pkl'),'rb'))
     print('Loading _keys...')
@@ -103,8 +103,8 @@ if __name__ == "__main__":
     connectTextwithKeyword(G,_keys)
     connectTextwithEntity(G,_entities)
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'wb'))
-    '''
-    '''
+    
+    
     G = pickle.load(open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'rb'))
     es = set()
     for e in _entities.keys():
@@ -115,14 +115,14 @@ if __name__ == "__main__":
                 n1,n2 = nameN((e,None),'entity'),nameN((r,None),'entity')
                 if n1 in G.nodes and n2 in G.nodes:
                     print('Add Edge < %s , %s >' % (nameN((e,None),'entity'),nameN((r,None),'entity')))
-                    G.add_edge(nameN(e,'entity'),nameN((r,None),'entity'))
+                    G.add_edge(nameN((e,None),'entity'),nameN((r,None),'entity'))
                 else:
                     print('No Edge < %s , %s >' % (nameN((e,None),'entity'),nameN((r,None),'entity')))
             if r.lower() in _keys:
                 n1,n2 = nameN((e,None),'entity'),nameN(r.lower(),'keyword')
                 if n1 in G.nodes and n2 in G.nodes:
                     print('Add Edge < %s , %s >' % (nameN((e,None),'entity'),nameN(r.lower(),'keyword')))
-                    G.add_edge(nameN(e,'entity'),nameN(r.lower(),'keyword'))
+                    G.add_edge(nameN((e,None),'entity'),nameN(r.lower(),'keyword'))
                 else:
                     print('No Edge < %s , %s >' % (nameN((e,None),'entity'),nameN(r.lower(),'keyword')))
     
@@ -137,7 +137,7 @@ if __name__ == "__main__":
                     else:
                         print('No Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
     pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'wb'))
-    '''
+    
     
     ps = {}
     paths = [['text', 'entity', 'text'], ['text', 'keyword', 'text'], ['text', 'entity', 'entity', 'text'], ['text', 'entity', 'keyword', 'text'], ['text', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'text'], ['text', 'entity', 'entity', 'entity', 'text'], ['text', 'entity', 'entity', 'keyword', 'text'], [
