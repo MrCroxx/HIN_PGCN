@@ -112,19 +112,19 @@ if __name__ == "__main__":
     for e,rs in rels.items():
         for r in rs:
             if r in es:
-                n1,n2 = nameN(e,'entity'),nameN((r,None),'entity')
+                n1,n2 = nameN((e,None),'entity'),nameN((r,None),'entity')
                 if n1 in G.nodes and n2 in G.nodes:
-                    print('Add Edge < %s , %s >' % (nameN(e,'entity'),nameN((r,None),'entity')))
+                    print('Add Edge < %s , %s >' % (nameN((e,None),'entity'),nameN((r,None),'entity')))
                     G.add_edge(nameN(e,'entity'),nameN((r,None),'entity'))
                 else:
-                    print('No Edge < %s , %s >' % (nameN(e,'entity'),nameN((r,None),'entity')))
+                    print('No Edge < %s , %s >' % (nameN((e,None),'entity'),nameN((r,None),'entity')))
             if r.lower() in _keys:
-                n1,n2 = nameN(e,'entity'),nameN(r.lower(),'keyword')
+                n1,n2 = nameN((e,None),'entity'),nameN(r.lower(),'keyword')
                 if n1 in G.nodes and n2 in G.nodes:
-                    print('Add Edge < %s , %s >' % (nameN(e,'entity'),nameN(r.lower(),'keyword')))
+                    print('Add Edge < %s , %s >' % (nameN((e,None),'entity'),nameN(r.lower(),'keyword')))
                     G.add_edge(nameN(e,'entity'),nameN(r.lower(),'keyword'))
                 else:
-                    print('No Edge < %s , %s >' % (nameN(e,'entity'),nameN(r.lower(),'keyword')))
+                    print('No Edge < %s , %s >' % (nameN((e,None),'entity'),nameN(r.lower(),'keyword')))
     
     for key in _keys.keys():
         for synset in wn.synsets(key):
