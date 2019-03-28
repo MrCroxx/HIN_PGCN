@@ -38,9 +38,12 @@ if __name__ == "__main__":
 
     while len(train_ids) < N:
         for c, ts in _cs.items():
+            if len(ts) == 0:
+                continue
             while ts[0] in train_ids:
                 del ts[0]        
             train_ids.append(ts[0])
+            print('add train id %s',ts[0])
             del ts[0]
 
     train_ids = sorted(train_ids)
