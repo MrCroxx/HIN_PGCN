@@ -31,8 +31,8 @@ if __name__ == "__main__":
         'text', 'entity', 'keyword', 'entity', 'text'], ['text', 'entity', 'keyword', 'keyword', 'text'], ['text', 'keyword', 'entity', 'entity', 'text'], ['text', 'keyword', 'entity', 'keyword', 'text'], ['text', 'keyword', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'keyword', 'text']]
 
     N = 23194
+    '''
     train_ids = []
-
     _cs = pickle.load(
         open(os.path.join(baseDir, 'output', '_codes.pkl'), 'rb'))
 
@@ -43,20 +43,21 @@ if __name__ == "__main__":
             while ts[0] in train_ids:
                 del ts[0]        
             train_ids.append(ts[0])
-            print('add train id %s',ts[0])
+            print('add train id %s' % ts[0])
             del ts[0]
 
     train_ids = sorted(train_ids)
     for i in train_ids:
         print('train id %s' % i)
     pickle.dump(train_ids, open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'wb'))
-
+    '''
+    train_ids = pickle.load( open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'wb'))
     A = np.zeros((14, N, N))
     for index, path in enumerate(paths):
         i = index+1
         for x in range(N):
             for y in range(0, x+1):
-                tx, ty = nameText(train_ids(x)), nameText(train_ids(y))
+                tx, ty = nameText(train_ids[x]), nameText(train_ids[y])
                 p = path[1:-1]
                 print('Calculating CouP < path=%s , x=%s ,y=%s | total=%s >...' % (
                     i, tx, ty, N))
