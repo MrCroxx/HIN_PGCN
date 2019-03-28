@@ -36,13 +36,14 @@ if __name__ == "__main__":
     _cs = pickle.load(
         open(os.path.join(baseDir, 'output', '_codes.pkl'), 'rb'))
 
-    for c, ts in _cs:
+    for c, ts in _cs.items():
         if len(train_ids) < N:
             train_ids.append(ts[0])
             del ts[0]
 
     train_ids = sorted(train_ids)
-    print(train_ids)
+    for i in train_ids:
+        print('train id %s' % i)
     pickle.dump(train_ids, os.path.join(baseDir, 'output', 'train_ids.pkl'))
 
     A = np.zeros((14, N, N))
