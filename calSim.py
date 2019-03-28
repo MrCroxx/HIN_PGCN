@@ -51,7 +51,7 @@ if __name__ == "__main__":
         print('train id %s' % i)
     pickle.dump(train_ids, open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'wb'))
     '''
-    train_ids = pickle.load( open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'wb'))
+    train_ids = pickle.load( open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'rb'))
     A = np.zeros((14, N, N))
     for index, path in enumerate(paths):
         i = index+1
