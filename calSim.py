@@ -36,15 +36,17 @@ if __name__ == "__main__":
     _cs = pickle.load(
         open(os.path.join(baseDir, 'output', '_codes.pkl'), 'rb'))
 
-    for c, ts in _cs.items():
-        if len(train_ids) < N:
+    while len(train_ids) < N:
+        for c, ts in _cs.items():
+            while ts[0] in train_ids:
+                del ts[0]        
             train_ids.append(ts[0])
             del ts[0]
 
     train_ids = sorted(train_ids)
     for i in train_ids:
         print('train id %s' % i)
-    pickle.dump(train_ids, os.path.join(baseDir, 'output', 'train_ids.pkl'))
+    pickle.dump(train_ids, open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'wb'))
 
     A = np.zeros((14, N, N))
     for index, path in enumerate(paths):
