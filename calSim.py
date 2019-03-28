@@ -32,7 +32,7 @@ if __name__ == "__main__":
     G = pickle.load(open(os.path.join(baseDir, 'output', 'G.pkl'), 'rb'))
     paths = [['text', 'entity', 'text'], ['text', 'keyword', 'text'], ['text', 'entity', 'entity', 'text'], ['text', 'entity', 'keyword', 'text'], ['text', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'text'], ['text', 'entity', 'entity', 'entity', 'text'], ['text', 'entity', 'entity', 'keyword', 'text'], [
         'text', 'entity', 'keyword', 'entity', 'text'], ['text', 'entity', 'keyword', 'keyword', 'text'], ['text', 'keyword', 'entity', 'entity', 'text'], ['text', 'keyword', 'entity', 'keyword', 'text'], ['text', 'keyword', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'keyword', 'text']]
-    
+    '''
     ts = []
     es = []
     ks = []
@@ -45,7 +45,7 @@ if __name__ == "__main__":
         elif node[:2] == 'ke':
             ks.append(node)
     '''
-
+    '''
     ts = set()
     es = set()
     ks = set()
