@@ -26,7 +26,7 @@ def couP(G, s, t, prevs, path):
 
 
 def calAbyIndex(args):
-    index, N, train_ids, G, paths = args
+    index, N, train_ids, G, path = args
     A = np.zeros((N, N))
     i = index+1
     for x in range(N):
@@ -72,9 +72,25 @@ if __name__ == "__main__":
     '''
     train_ids = pickle.load(
         open(os.path.join(baseDir, 'output', 'train_ids.pkl'), 'rb'))
-
+    
     executor = ProcessPoolExecutor(max_workers=20)
+    '''
+    for index, path in enumerate(paths):
+        A = np.zeros((N, N))
+        i = index+1
+        for x in range(N):
+            for y in range(0, x+1):
+                tx, ty = nameText(train_ids[x]), nameText(train_ids[y])
+                p = path[1:-1]
+                print('Calculating CouP < path=%s , x=%s ,y=%s | total=%s >...' %
+                    (i, tx, ty, N))
+                c = couP(G, tx, ty, [], p)
+                print('Get Coup(%s,%s)=%s.' % (x, y, c))
+                A[i, x, y] = c
+        np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
+    '''
     for index, path in enumerate(paths):
         executor.submit(calAbyIndex,(index, N, train_ids, G, paths))
     executor.shutdown(wait=True)
+    
     # pickle.dump(A, open(os.path.join(baseDir, 'output', 'A.pkl'), 'wb'))
