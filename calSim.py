@@ -25,7 +25,8 @@ def couP(G, s, t, prevs, path):
     return ans
 
 
-def calAbyIndex(index, N, train_ids, G, paths):
+def calAbyIndex(args):
+    index, N, train_ids, G, paths = args
     A = np.zeros((N, N))
     i = index+1
     for x in range(N):
@@ -74,6 +75,6 @@ if __name__ == "__main__":
 
     executor = ProcessPoolExecutor(max_workers=20)
     for index, path in enumerate(paths):
-
-    np.save(os.path.join(baseDir, 'output', 'A.pkl'), A)
+        executor.submit(calAbyIndex,(index, N, train_ids, G, paths))
+    executor.shutdown(wait=True)
     # pickle.dump(A, open(os.path.join(baseDir, 'output', 'A.pkl'), 'wb'))
