@@ -31,7 +31,7 @@ if __name__ == "__main__":
         'text', 'entity', 'keyword', 'entity', 'text'], ['text', 'entity', 'keyword', 'keyword', 'text'], ['text', 'keyword', 'entity', 'entity', 'text'], ['text', 'keyword', 'entity', 'keyword', 'text'], ['text', 'keyword', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'keyword', 'text']]
 
     N = 23194
-    '''
+    
     train_ids = []
     _cs = pickle.load(
         open(os.path.join(baseDir, 'output', '_codes.pkl'), 'rb'))
@@ -50,8 +50,8 @@ if __name__ == "__main__":
     for i in train_ids:
         print('train id %s' % i)
     pickle.dump(train_ids, open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'wb'))
-    '''
-    train_ids = pickle.load( open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'rb'))
+    
+    train_ids = pickle.load(open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'rb'))
     A = np.zeros((14, N, N))
     for index, path in enumerate(paths):
         i = index+1
