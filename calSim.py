@@ -37,7 +37,7 @@ def calAbyIndex(args):
                   (i, tx, ty, N))
             c = couP(G, tx, ty, [], p)
             print('Get Coup(%s,%s)=%s.' % (x, y, c))
-            A[i, x, y] = c
+            A[x, y] = c
     np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
 
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     executor = ProcessPoolExecutor(max_workers=20)
     '''
     for index, path in enumerate(paths):
-        A = np.zeros((N, N))
+        A = np.zeros((14,N, N))
         i = index+1
         for x in range(N):
             for y in range(0, x+1):
