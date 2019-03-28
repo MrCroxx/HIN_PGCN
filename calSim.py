@@ -60,6 +60,7 @@ if __name__ == "__main__":
     '''
 
     N = len(ts)
+    print(N)
     A = np.zeros((14, N, N))
     for index, path in enumerate(paths):
         i = index+1
