@@ -90,7 +90,7 @@ if __name__ == "__main__":
         np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
     '''
     for index, path in enumerate(paths):
-        executor.submit(calAbyIndex,(index, N, train_ids, G, paths))
+        executor.submit(calAbyIndex,(index, N, train_ids, G, path))
     executor.shutdown(wait=True)
     
     # pickle.dump(A, open(os.path.join(baseDir, 'output', 'A.pkl'), 'wb'))
