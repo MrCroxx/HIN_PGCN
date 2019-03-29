@@ -11,3 +11,5 @@ output/_codes.pkl
 output/_entities.pkl
 G.pkl
 hin.log
+output/CG.pkl
+output/train_ids.pkl
