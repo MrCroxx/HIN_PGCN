@@ -38,7 +38,7 @@ def calAbyIndex(args):
     tasks = []
     for x in range(N):
         for y in range(0,x+1):
-            print('submit %s,%s out of %s.' % (x,y,N))
+            # print('submit %s,%s out of %s.' % (x,y,N))
             tasks.append(executor.submit(couP,args=(G,nameText(train_ids[x]),nameText(train_ids[y]),[], path[1:-1],(i, x, y, N))))
     ens = [ task.result() for task in as_completed(tasks) ]
     t = 0
