@@ -44,7 +44,7 @@ def calAbyIndex(args):
     t = 0
     for x in range(N):
         for y in range(0,x+1):
-            A[x,y] = ens[t]
+            A[x,y] = A[y,x] = ens[t]
             t += 1
     np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
 
