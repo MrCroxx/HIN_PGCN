@@ -4,7 +4,7 @@ import os
 import os.path
 import numpy as np
 
-from concurrent.futures import ProcessPoolExecutor,as_completed
+from concurrent.futures import ThreadPoolExecutor,as_completed
 
 
 def nameText(i):
@@ -31,10 +31,15 @@ def couP(args):
 
 def calAbyIndex(args):
     index, N, train_ids, G, path = args
-    executor = ProcessPoolExecutor(max_workers=32)
+    executor = ThreadPoolExecutor()
     A = np.zeros((N, N))
     i = index+1
-    tasks = [ executor.submit(couP,args=(G,nameText(train_ids[x]),nameText(train_ids[y]),[], path[1:-1],(i, x, y, N))) for x in range(N) for y in range(0,x+1)  ]
+    # tasks = [ executor.submit(couP,args=(G,nameText(train_ids[x]),nameText(train_ids[y]),[], path[1:-1],(i, x, y, N))) for x in range(N) for y in range(0,x+1)  ]
+    tasks = []
+    for x in range(N):
+        for y in range(0,x+1):
+            print('submit %s,%s out of %s.' % (x,y,N))
+            tasks.append(executor.submit(couP,args=(G,nameText(train_ids[x]),nameText(train_ids[y]),[], path[1:-1],(i, x, y, N))))
     ens = [ task.result() for task in as_completed(tasks) ]
     t = 0
     for x in range(N):
@@ -92,7 +97,7 @@ if __name__ == "__main__":
     train_ids = pickle.load(
         open(os.path.join(baseDir, 'output', 'train_ids.pkl'), 'rb'))
     print('load finish.')
-    # executor = ProcessPoolExecutor(max_workers=32)
+    executor = ThreadPoolExecutor()
     '''
     for index, path in enumerate(paths):
         A = np.zeros((14,N, N))
@@ -108,11 +113,11 @@ if __name__ == "__main__":
                 A[i, x, y] = c
         np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
     '''
-    index = input('Please input layer:')
-    index = int(index)
-    # for index, path in enumerate(paths):
-    #     executor.submit(calAbyIndex,(index, N, train_ids, G, path))
-    # executor.shutdown(wait=True)
-    calAbyIndex((index,N,train_ids,G,paths[index]))
+    # index = input('Please input layer:')
+    # index = int(index)
+    for index, path in enumerate(paths):
+        executor.submit(calAbyIndex,(index, N, train_ids, G, path))
+    executor.shutdown(wait=True)
+    # calAbyIndex((index,N,train_ids,G,paths[index]))
     
     # pickle.dump(A, open(os.path.join(baseDir, 'output', 'A.pkl'), 'wb'))
