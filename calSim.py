@@ -91,8 +91,8 @@ if __name__ == "__main__":
     '''
     train_ids = pickle.load(
         open(os.path.join(baseDir, 'output', 'train_ids.pkl'), 'rb'))
-    
-    executor = ProcessPoolExecutor(max_workers=32)
+    print('load finish.')
+    # executor = ProcessPoolExecutor(max_workers=32)
     '''
     for index, path in enumerate(paths):
         A = np.zeros((14,N, N))
@@ -108,8 +108,11 @@ if __name__ == "__main__":
                 A[i, x, y] = c
         np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
     '''
-    for index, path in enumerate(paths):
-        executor.submit(calAbyIndex,(index, N, train_ids, G, path))
-    executor.shutdown(wait=True)
+    index = input('Please input layer:')
+    index = int(index)
+    # for index, path in enumerate(paths):
+    #     executor.submit(calAbyIndex,(index, N, train_ids, G, path))
+    # executor.shutdown(wait=True)
+    calAbyIndex((index,N,train_ids,G,paths[index]))
     
     # pickle.dump(A, open(os.path.join(baseDir, 'output', 'A.pkl'), 'wb'))
