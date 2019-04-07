@@ -15,8 +15,8 @@ def createCodeG(f_hier):
 
 
 if __name__ == "__main__":
-    # baseDir = 'D:/Lab/HIN_PGCN'
-    baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
+    baseDir = 'D:/Lab/HIN_PGCN'
+    # baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
     f_hier = open(os.path.join(baseDir, 'files',
                                'rcv1.topics.hier.orig.txt'), 'r', encoding='utf8')
     codes = pickle.load(open(os.path.join(baseDir,'output','codes.pkl'),'rb'))
