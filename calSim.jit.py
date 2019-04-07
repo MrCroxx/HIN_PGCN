@@ -3,14 +3,15 @@ import pickle
 import os
 import os.path
 import numpy as np
+import numba as nb
 
-from concurrent.futures import ProcessPoolExecutor,as_completed
+from concurrent.futures import ThreadPoolExecutor,as_completed
 
-
+@nb.jit(nopython=True,nogil=True)
 def nameText(i):
     return 'text_%08d' % (i,)
 
-
+@nb.jit(nopython=True,nogil=True)
 def couP(args):
     G, s, t, prevs, path, log = args
     if len(path) == 0:
@@ -28,10 +29,10 @@ def couP(args):
         print('Get Coup(%s,%s)=%s. [total=%s,layer=%s]' % (x, y, ans, total, i))
     return ans
 
-
+@nb.jit(nopython=True,nogil=True)
 def calAbyIndex(args):
     index, N, train_ids, G, path = args
-    executor = ProcessPoolExecutor()
+    executor = ThreadPoolExecutor()
     A = np.zeros((N, N))
     i = index+1
     # tasks = [ executor.submit(couP,args=(G,nameText(train_ids[x]),nameText(train_ids[y]),[], path[1:-1],(i, x, y, N))) for x in range(N) for y in range(0,x+1)  ]
@@ -97,7 +98,7 @@ if __name__ == "__main__":
     train_ids = pickle.load(
         open(os.path.join(baseDir, 'output', 'train_ids.pkl'), 'rb'))
     print('load finish.')
-    executor = ProcessPoolExecutor()
+    executor = ThreadPoolExecutor()
     '''
     for index, path in enumerate(paths):
         A = np.zeros((14,N, N))
