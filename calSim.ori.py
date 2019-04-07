@@ -3,17 +3,14 @@ import pickle
 import os
 import os.path
 import numpy as np
-import numba as nb
 
-from concurrent.futures import ThreadPoolExecutor,as_completed
+from concurrent.futures import ProcessPoolExecutor
 
-@nb.jit(nopython=True,nogil=True)
 def nameText(i):
     return 'text_%08d' % (i,)
 
-@nb.jit(nopython=True,nogil=True)
 def couP(args):
-    G, s, t, prevs, path, log = args
+    G, s, t, prevs, path = args
     if len(path) == 0:
         if t in G.adj[s]:
             return 1
@@ -23,36 +20,13 @@ def couP(args):
     adj = [node for node in G.adj[s] if node[:2]
            == aim[:2] and node not in prevs]
     for a in adj:
-        ans += couP((G, a, t, prevs+[a], path[1:],None))
-    if log is not None:
-        i,x,y,total = log
-        print('Get Coup(%s,%s)=%s. [total=%s,layer=%s]' % (x, y, ans, total, i))
+        ans += couP((G, a, t, prevs+[a], path[1:]))
     return ans
 
-@nb.jit(nopython=True,nogil=True)
-def calAbyIndex(args):
-    index, N, train_ids, G, path = args
-    executor = ThreadPoolExecutor()
-    A = np.zeros((N, N))
-    i = index+1
-    # tasks = [ executor.submit(couP,args=(G,nameText(train_ids[x]),nameText(train_ids[y]),[], path[1:-1],(i, x, y, N))) for x in range(N) for y in range(0,x+1)  ]
-    tasks = []
-    for x in range(N):
-        for y in range(0,x+1):
-            # print('submit %s,%s out of %s.' % (x,y,N))
-            tasks.append(executor.submit(couP,args=(G,nameText(train_ids[x]),nameText(train_ids[y]),[], path[1:-1],(i, x, y, N))))
-    ens = [ task.result() for task in as_completed(tasks) ]
-    t = 0
-    for x in range(N):
-        for y in range(0,x+1):
-            A[x,y] = A[y,x] = ens[t]
-            t += 1
-    np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
 
-'''
+
 def calAbyIndex(args):
     index, N, train_ids, G, path = args
-    # executor = ProcessPoolExecutor(max_workers=32)
     A = np.zeros((N, N))
     i = index+1
     for x in range(N):
@@ -60,11 +34,12 @@ def calAbyIndex(args):
             tx, ty = nameText(train_ids[x]), nameText(train_ids[y])
             p = path[1:-1]
             print('Calculating CouP < path=%s , x=%s ,y=%s | total=%s >...' % (i, tx, ty, N))
-            c = couP(G, tx, ty, [], p)
+            c = couP((G, tx, ty, [], p))
             print('Get Coup(%s,%s)=%s.' % (x, y, c))
             A[x, y] = c
+            A[y, x] = c
     np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
-'''
+
 
 if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
@@ -98,7 +73,7 @@ if __name__ == "__main__":
     train_ids = pickle.load(
         open(os.path.join(baseDir, 'output', 'train_ids.pkl'), 'rb'))
     print('load finish.')
-    executor = ThreadPoolExecutor()
+    executor = ProcessPoolExecutor(max_workers=20)
     '''
     for index, path in enumerate(paths):
         A = np.zeros((14,N, N))
