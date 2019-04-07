@@ -6,11 +6,12 @@ import numpy as np
 
 from concurrent.futures import ProcessPoolExecutor
 
+
 def nameText(i):
     return 'text_%08d' % (i,)
 
-def couP(args):
-    G, s, t, prevs, path = args
+
+def couP(G, s, t, prevs, path):
     if len(path) == 0:
         if t in G.adj[s]:
             return 1
@@ -20,9 +21,8 @@ def couP(args):
     adj = [node for node in G.adj[s] if node[:2]
            == aim[:2] and node not in prevs]
     for a in adj:
-        ans += couP((G, a, t, prevs+[a], path[1:]))
+        ans += couP(G, a, t, prevs+[a], path[1:])
     return ans
-
 
 
 def calAbyIndex(args):
@@ -33,11 +33,11 @@ def calAbyIndex(args):
         for y in range(0, x+1):
             tx, ty = nameText(train_ids[x]), nameText(train_ids[y])
             p = path[1:-1]
-            print('Calculating CouP < path=%s , x=%s ,y=%s | total=%s >...' % (i, tx, ty, N))
-            c = couP((G, tx, ty, [], p))
+            print('Calculating CouP < path=%s , x=%s ,y=%s | total=%s >...' %
+                  (i, tx, ty, N))
+            c = couP(G, tx, ty, [], p)
             print('Get Coup(%s,%s)=%s.' % (x, y, c))
             A[x, y] = c
-            A[y, x] = c
     np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
 
 
@@ -54,7 +54,6 @@ if __name__ == "__main__":
     train_ids = []
     _cs = pickle.load(
         open(os.path.join(baseDir, 'output', '_codes.pkl'), 'rb'))
-
     while len(train_ids) < N:
         for c, ts in _cs.items():
             if len(ts) == 0:
@@ -64,7 +63,6 @@ if __name__ == "__main__":
             train_ids.append(ts[0])
             print('add train id %s' % ts[0])
             del ts[0]
-
     train_ids = sorted(train_ids)
     for i in train_ids:
         print('train id %s' % i)
@@ -72,7 +70,7 @@ if __name__ == "__main__":
     '''
     train_ids = pickle.load(
         open(os.path.join(baseDir, 'output', 'train_ids.pkl'), 'rb'))
-    print('load finish.')
+    
     executor = ProcessPoolExecutor(max_workers=20)
     '''
     for index, path in enumerate(paths):
@@ -89,11 +87,8 @@ if __name__ == "__main__":
                 A[i, x, y] = c
         np.save(os.path.join(baseDir, 'output', 'A-%s.pkl' % i), A)
     '''
-    # index = input('Please input layer:')
-    # index = int(index)
     for index, path in enumerate(paths):
         executor.submit(calAbyIndex,(index, N, train_ids, G, path))
     executor.shutdown(wait=True)
-    # calAbyIndex((index,N,train_ids,G,paths[index]))
     
     # pickle.dump(A, open(os.path.join(baseDir, 'output', 'A.pkl'), 'wb'))
