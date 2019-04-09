@@ -134,14 +134,14 @@ if __name__ == "__main__":
                         G.add_edge(nameN(key,'keyword'),nameN(word.lower(),'keyword'))
                     else:
                         print('No Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
-    pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-EEEKKK.pkl'),'wb'))
+    pickle.dump(G,open(os.path.join(baseDir,'output','G.pkl'),'wb'))
     
-    
+    '''
     ps = {}
     paths = [['text', 'entity', 'text'], ['text', 'keyword', 'text'], ['text', 'entity', 'entity', 'text'], ['text', 'entity', 'keyword', 'text'], ['text', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'text'], ['text', 'entity', 'entity', 'entity', 'text'], ['text', 'entity', 'entity', 'keyword', 'text'], [
         'text', 'entity', 'keyword', 'entity', 'text'], ['text', 'entity', 'keyword', 'keyword', 'text'], ['text', 'keyword', 'entity', 'entity', 'text'], ['text', 'keyword', 'entity', 'keyword', 'text'], ['text', 'keyword', 'keyword', 'entity', 'text'], ['text', 'keyword', 'keyword', 'keyword', 'text']]
     G = pickle.load(
-        open(os.path.join(baseDir, 'output', 'G-TEK-EEEKKK.pkl'), 'rb'))
+        open(os.path.join(baseDir, 'output', 'G.pkl'), 'rb'))
     for p in paths:
         print('Finding Path : ', p, ' ...')
         ans = findPath(G, p)
@@ -150,4 +150,5 @@ if __name__ == "__main__":
             ps[str(p)] = ans
     pickle.dump(ps, open(os.path.join(
         baseDir, 'output', 'matepaths.pkl'), 'rb'))
+    '''
     

@@ -20,14 +20,14 @@ if __name__ == "__main__":
 
     for i,row in enumerate(keys_raw):
         print('Processing key %s...' % i)
-        for key in row[:10]:
+        for key in row[:5]:
             if key not in keys:
                 keys[key] = []
             keys[key].append(i)
 
     for i,row in enumerate(entities_raw):        
         print('Processing entity %s...' % i)
-        for entity in row[:10]:
+        for entity in row[:5]:
             if entity not in entities:
                 entities[entity] = []
             entities[entity].append(i)
