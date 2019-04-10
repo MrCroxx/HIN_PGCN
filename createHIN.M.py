@@ -11,10 +11,28 @@ import gc
 def getAPath(baseDir,name):
     return os.path.join(baseDir,'output','A',name)
 
+class Indexer:
+    def __init__(self,N,nentity,nkey,tid2index):
+        self.N = N
+        self.nentity = nentity
+        self.nkey = nkey
+        self.tid2index = tid2index
+
+    def index(self,i,type):
+        if type == 'T':
+            return self.tid2index[i]
+        elif type == 'E':
+            return self.N + i
+        elif type == 'K':
+            return self.N + self.nentity + i
+        else:
+            raise Exception('Wrong Matrix Type <%s>.' % type)
+
 if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
     baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
     
+    '''
     print('Loading texts...')
     texts = pickle.load(open(os.path.join(baseDir,'output','texts.pkl'),'rb'))
     print('Loading _keys...')
@@ -29,9 +47,17 @@ if __name__ == "__main__":
     nentity = len(_entities)
     nkey = len(_keys)
 
+    nums = {
+        'N':N,
+        'ntext':ntext,
+        'nentity':nentity,
+        'nkey':nkey
+    }
+    pickle.dump(nums,open(os.path.join(baseDir,'output','nums.pkl'),'wb'))
+
     types = ['T','E','K']
 
-    '''
+    
 
     edges = {}
     for i in types:
@@ -52,10 +78,10 @@ if __name__ == "__main__":
     pickle.dump(key2id,open(os.path.join(baseDir,'output','key2id.pkl'),'wb'))
     pickle.dump(entity2id,open(os.path.join(baseDir,'output','entity2id.pkl'),'wb'))
     print('Finish mapping keywords and entities.')
-    '''
+    
 
     
-    '''
+    
     print('Picking train set...')
     train_ids = []
     _cs = pickle.load(
@@ -76,8 +102,8 @@ if __name__ == "__main__":
         print('train id %s' % i)
     pickle.dump(train_ids, open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'wb'))
     print('Finish picking train set.')
-    '''
-    '''
+    
+    
     train_ids = pickle.load(open(os.path.join(baseDir,'output','train_ids.pkl'),'rb'))
     
     for e,tids in _entities.items():
@@ -111,15 +137,38 @@ if __name__ == "__main__":
                     edges[('K','K')].append((key2id[word.lower()],key2id[key]))
     
     pickle.dump(edges,open(os.path.join(baseDir,'output','edges.pkl'),'wb'))
-
     '''
+    
     # Create and Save Initial A matrix.
 
     edges = pickle.load(open(os.path.join(baseDir,'output','edges.pkl'),'rb'))
     train_ids = pickle.load(open(os.path.join(baseDir,'output','train_ids.pkl'),'rb'))
+    nums = pickle.load(open(os.path.join(baseDir,'output','nums.pkl'),'rb'))
+
+    N = nums['N']
+    ntext = nums['ntext']
+    nentity = nums['nentity']
+    nkey = nums['nkey']
 
     tid2index = { tid:index for index,tid in enumerate(train_ids) }
 
+    indexer = Indexer(N,nentity,nkey,tid2index)
+
+    L = N + nentity + nkey
+
+    A = np.zeros((L,L))
+    for t,pairs in edges:
+        tx,ty = t
+        for pair in pairs:
+            x,y = pair
+            if (tx == 'T' and x not in tid2index) or (ty=='T' and y not in tid2index):
+                continue
+            A[indexer.index(x,tx),indexer.index(y,ty)] = 1
+    np.save(getAPath(baseDir,'A'),A) 
+
+
+
+    '''
 
     print('Creating TT...')
     TT = np.zeros((N,N))
@@ -210,3 +259,4 @@ if __name__ == "__main__":
     np.save(getAPath(baseDir,'KE'),KE)
     del KE
     gc.collect()
+    '''
