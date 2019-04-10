@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
     baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
     
-    '''
+    
     print('Loading texts...')
     texts = pickle.load(open(os.path.join(baseDir,'output','texts.pkl'),'rb'))
     print('Loading _keys...')
@@ -55,6 +55,7 @@ if __name__ == "__main__":
     }
     pickle.dump(nums,open(os.path.join(baseDir,'output','nums.pkl'),'wb'))
 
+    '''
     types = ['T','E','K']
 
     
