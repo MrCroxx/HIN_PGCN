@@ -29,6 +29,8 @@ def calAbyIndex(args):
     index, N, train_ids, G, path = args
     A = np.zeros((N, N))
     i = index+1
+    if i in [1,2,5,6]:
+        return None
     for x in range(N):
         for y in range(0, x+1):
             tx, ty = nameText(train_ids[x]), nameText(train_ids[y])
