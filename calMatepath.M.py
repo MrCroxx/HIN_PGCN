@@ -40,9 +40,11 @@ def martixMul(tA, tB, history):
     tX01 = tA + tB
     tX10 = tB + tA
     tX11 = tB + tB
+    '''
     for X in ALL:
         if X != tX00 and X != tX01 and X != tX10 and X != tX11:
             shutil.copyfile(getAFilename(baseDir,getAHisName(X,history)),getAFilename(baseDir,getANewName(X,history,tA,tB)))
+    '''
     if tA != tB:
         X00 = np.mat(np.load(getAFilename(baseDir,getAHisName(tX00,history))))
         X01 = np.mat(np.load(getAFilename(baseDir,getAHisName(tX01,history))))
@@ -97,4 +99,5 @@ if __name__ == "__main__":
         open(os.path.join(baseDir, 'output', 'train_ids.pkl'), 'rb'))
     tid2index = {tid: index for index, tid in enumerate(train_ids)}
 
-    calPath(paths[0])
+    # calPath(paths[0])
+    martixMul('T','K',[])
