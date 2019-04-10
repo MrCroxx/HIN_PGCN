@@ -149,34 +149,34 @@ if __name__ == "__main__":
         e = e[0]
         eid = entity2id[e]
         for tid in tids:
-            edges[('E','T')].append(eid,tid)
-            edges[('T','E')].append(tid,eid)
+            edges[('E','T')].append((eid,tid))
+            edges[('T','E')].append((tid,eid))
 
     for k,tids in _keys.items():
         kid = key2id[k]
         for tid in tids:
-            edges[('K','T')].append(kid,tid)
-            edges[('T','K')].append(tid,kid)
+            edges[('K','T')].append((kid,tid))
+            edges[('T','K')].append((tid,kid))
         
 
     for e,rs in rels.items():
         for r in rs:
             if e in entity2id and r in entity2id:
-                edges[('E','E')].append(entity2id[e],entity2id[r])
-                edges[('E','E')].append(entity2id[r],entity2id[e])
+                edges[('E','E')].append((entity2id[e],entity2id[r]))
+                edges[('E','E')].append((entity2id[r],entity2id[e]))
             if r.lower() in key2id:
-                edges[('E','K')].append(entity2id[r],key2id[r.lower()])
-                edges[('K','E')].append(key2id[r.lower()],entity2id[r])
+                edges[('E','K')].append((entity2id[r],key2id[r.lower()]))
+                edges[('K','E')].append((key2id[r.lower()],entity2id[r]))
 
     for key in _keys.keys():
         for synset in wn.synsets(key):
             for word in synset.lemma_names():
                 if word.lower() != key and word.lower() in key2id:
-                    edges[('K','K')].append(key2id[key],key2id[word.lower()])
-                    edges[('K','K')].append(key2id[word.lower()],key2id[key])
+                    edges[('K','K')].append((key2id[key],key2id[word.lower()]))
+                    edges[('K','K')].append((key2id[word.lower()],key2id[key]))
     
     pickle.dump(edges,open(os.path.join(baseDir,'output','edges.pkl'),'wb'))
-    
+
 
     '''
     G = nx.Graph()
