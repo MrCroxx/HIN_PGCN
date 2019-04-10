@@ -117,11 +117,13 @@ if __name__ == "__main__":
 
     edges = pickle.load(open(os.path.join(baseDir,'output','edges.pkl'),'rb'))
 
+    print('Creating TT...')
     TT = np.zeros((N,N))
     np.save(getAPath(baseDir,'TT'),TT)
     del TT
     gc.collect()
 
+    print('Creating EE...')
     EE = np.zeros((nentity,nentity))
     for pair in edges[('E','E')]:
         x, y = pair
@@ -130,6 +132,7 @@ if __name__ == "__main__":
     del EE
     gc.collect()
 
+    print('Creating KK...')
     KK = np.zeros((nkey,nkey))
     for pair in edges[('K','K')]:
         x, y = pair
@@ -138,6 +141,7 @@ if __name__ == "__main__":
     del KK
     gc.collect()
 
+    print('Creating TE...')
     TE = np.zeros((N,nentity))
     for pair in edges[('T','E')]:
         x, y = pair
@@ -146,6 +150,7 @@ if __name__ == "__main__":
     del TE
     gc.collect()
 
+    print('Creating ET...')
     ET = np.zeros((nentity,N))
     for pair in edges[('E','T')]:
         x, y = pair
@@ -154,6 +159,7 @@ if __name__ == "__main__":
     del ET
     gc.collect()
 
+    print('Creating TK...')
     TK = np.zeros((N,nkey))
     for pair in edges[('T','K')]:
         x, y = pair
@@ -162,6 +168,7 @@ if __name__ == "__main__":
     del TK
     gc.collect()
 
+    print('Creating KT...')
     KT = np.zeros((nkey,N))
     for pair in edges[('K','T')]:
         x, y = pair
@@ -170,6 +177,7 @@ if __name__ == "__main__":
     del KT
     gc.collect()
 
+    print('Creating EK...')
     EK = np.zeros((nentity,nkey))
     for pair in edges[('E','K')]:
         x, y = pair
@@ -178,6 +186,7 @@ if __name__ == "__main__":
     del EK
     gc.collect()
     
+    print('Creating KE...')
     KE = np.zeros((nkey,nentity))
     for pair in edges[('K','E')]:
         x, y = pair
