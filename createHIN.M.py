@@ -149,6 +149,8 @@ if __name__ == "__main__":
     TE = np.zeros((N,nentity))
     for pair in edges[('T','E')]:
         x, y = pair
+        if x not in tid2index:
+            continue
         x = tid2index[x]
         TE[x,y] = 1
     np.save(getAPath(baseDir,'TE'),TE)
@@ -159,6 +161,8 @@ if __name__ == "__main__":
     ET = np.zeros((nentity,N))
     for pair in edges[('E','T')]:
         x, y = pair
+        if y not in tid2index:
+            continue
         y = tid2index[y]
         ET[x,y] = 1
     np.save(getAPath(baseDir,'ET'),ET)
@@ -169,6 +173,8 @@ if __name__ == "__main__":
     TK = np.zeros((N,nkey))
     for pair in edges[('T','K')]:
         x, y = pair
+        if x not in tid2index:
+            continue
         x = tid2index[x]
         TK[x,y] = 1
     np.save(getAPath(baseDir,'TK'),TK)
@@ -179,6 +185,8 @@ if __name__ == "__main__":
     KT = np.zeros((nkey,N))
     for pair in edges[('K','T')]:
         x, y = pair
+        if y not in tid2index:
+            continue
         y = tid2index[y]
         KT[x,y] = 1
     np.save(getAPath(baseDir,'KT'),KT)
