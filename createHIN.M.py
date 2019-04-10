@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
     baseDir = '/home/LAB/penghao/croxx/HIN_PGCN'
     
-    
+    '''
     print('Loading texts...')
     texts = pickle.load(open(os.path.join(baseDir,'output','texts.pkl'),'rb'))
     print('Loading _keys...')
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     }
     pickle.dump(nums,open(os.path.join(baseDir,'output','nums.pkl'),'wb'))
 
-    '''
+    
     types = ['T','E','K']
 
     
@@ -142,6 +142,8 @@ if __name__ == "__main__":
     
     # Create and Save Initial A matrix.
 
+    '''
+    # Memory Error
     edges = pickle.load(open(os.path.join(baseDir,'output','edges.pkl'),'rb'))
     train_ids = pickle.load(open(os.path.join(baseDir,'output','train_ids.pkl'),'rb'))
     nums = pickle.load(open(os.path.join(baseDir,'output','nums.pkl'),'rb'))
@@ -166,19 +168,29 @@ if __name__ == "__main__":
                 continue
             A[indexer.index(x,tx),indexer.index(y,ty)] = 1
     np.save(getAPath(baseDir,'A'),A) 
-
-
-
     '''
 
+
+    edges = pickle.load(open(os.path.join(baseDir,'output','edges.pkl'),'rb'))
+    train_ids = pickle.load(open(os.path.join(baseDir,'output','train_ids.pkl'),'rb'))
+    nums = pickle.load(open(os.path.join(baseDir,'output','nums.pkl'),'rb'))
+
+    N = nums['N']
+    ntext = nums['ntext']
+    nentity = nums['nentity']
+    nkey = nums['nkey']
+
+    tid2index = { tid:index for index,tid in enumerate(train_ids) }
+    
+
     print('Creating TT...')
-    TT = np.zeros((N,N))
+    TT = np.mat(np.zeros((N,N)))
     np.save(getAPath(baseDir,'TT'),TT)
     del TT
     gc.collect()
 
     print('Creating EE...')
-    EE = np.zeros((nentity,nentity))
+    EE = np.mat(np.zeros((nentity,nentity)))
     for pair in edges[('E','E')]:
         x, y = pair
         EE[x,y] = 1
@@ -187,7 +199,7 @@ if __name__ == "__main__":
     gc.collect()
 
     print('Creating KK...')
-    KK = np.zeros((nkey,nkey))
+    KK = np.mat(np.zeros((nkey,nkey)))
     for pair in edges[('K','K')]:
         x, y = pair
         KK[x,y] = 1
@@ -196,7 +208,7 @@ if __name__ == "__main__":
     gc.collect()
 
     print('Creating TE...')
-    TE = np.zeros((N,nentity))
+    TE = np.mat(np.zeros((N,nentity)))
     for pair in edges[('T','E')]:
         x, y = pair
         if x not in tid2index:
@@ -208,7 +220,7 @@ if __name__ == "__main__":
     gc.collect()
 
     print('Creating ET...')
-    ET = np.zeros((nentity,N))
+    ET = np.mat(np.zeros((nentity,N)))
     for pair in edges[('E','T')]:
         x, y = pair
         if y not in tid2index:
@@ -220,7 +232,7 @@ if __name__ == "__main__":
     gc.collect()
 
     print('Creating TK...')
-    TK = np.zeros((N,nkey))
+    TK = np.mat(np.zeros((N,nkey)))
     for pair in edges[('T','K')]:
         x, y = pair
         if x not in tid2index:
@@ -232,7 +244,7 @@ if __name__ == "__main__":
     gc.collect()
 
     print('Creating KT...')
-    KT = np.zeros((nkey,N))
+    KT = np.mat(np.zeros((nkey,N)))
     for pair in edges[('K','T')]:
         x, y = pair
         if y not in tid2index:
@@ -244,7 +256,7 @@ if __name__ == "__main__":
     gc.collect()
 
     print('Creating EK...')
-    EK = np.zeros((nentity,nkey))
+    EK = np.mat(np.zeros((nentity,nkey)))
     for pair in edges[('E','K')]:
         x, y = pair
         EK[x,y] = 1
@@ -253,11 +265,11 @@ if __name__ == "__main__":
     gc.collect()
     
     print('Creating KE...')
-    KE = np.zeros((nkey,nentity))
+    KE = np.mat(np.zeros((nkey,nentity)))
     for pair in edges[('K','E')]:
         x, y = pair
         KE[x,y] = 1
     np.save(getAPath(baseDir,'KE'),KE)
     del KE
     gc.collect()
-    '''
+    
