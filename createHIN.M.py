@@ -4,84 +4,12 @@ import pickle
 
 import networkx as nx
 import nltk
-from nltk.corpus import wordnet as wn
 import numpy as np
+from nltk.corpus import wordnet as wn
+import gc
 
-
-def saveG(graph, path):
-    pickle.dump(graph, open(path, 'wb'))
-
-
-def loadG(path):
-    return pickle.load(open('path', 'rb'))
-
-
-def nameN(node, type):
-    if type == 'text':
-        return 'text_%08d' % node
-    elif type == 'keyword':
-        return 'keyword_%s' % node
-    elif type == 'entity':
-        return 'entity_%s' % node[0]
-
-
-def addTexts2G(G: nx.Graph, texts):
-    for i, text in enumerate(texts):
-        name = nameN(i, 'text')
-        print('Add Node <%s>' % name)
-        G.add_node(name, type='text', text=text)
-
-
-def addEntities2G(G: nx.Graph, entities):
-    for entity in entities:
-        name = nameN(entity, 'entity')
-        print('Add Node <%s>' % name)
-        G.add_node(name, type='entity', entity=entity)
-
-
-def addKeywords2G(G: nx.Graph, keywords):
-    for keyword in keywords:
-        name = nameN(keyword, 'keyword')
-        print('Add Node <%s>' % name)
-        G.add_node(name, type='keyword', keyword=keyword)
-
-
-def connectTextwithKeyword(G: nx.Graph, _keys):
-    for k, ts in _keys.items():
-        name_k = nameN(k, 'keyword')
-        for t in ts:
-            name_t = nameN(t, 'text')
-            G.add_edge(name_k, name_t)
-            print('Add Edge < %s , %s >...' % (name_k, name_t))
-
-
-def connectTextwithEntity(G: nx.Graph, _entities):
-    for e, ts in _entities.items():
-        name_e = nameN(e, 'entity')
-        for t in ts:
-            name_t = nameN(t, 'text')
-            G.add_edge(name_e, name_t)
-            print('Add Edge < %s , %s >...' % (name_e, name_t))
-
-
-def findNext(G, n, pp, pn):
-    if len(pn) == 0:
-        return pp
-    for node in G.adj[n]:
-        if node[:2] == pn[0][:2] and node not in pp:
-            return findNext(G, node, pp + [node], pn[1:])
-    return None
-
-
-def findPath(G, p):
-    ans = None
-    for s in G.nodes:
-        if ans is not None:
-            return ans
-        if s[:2] == 'te':
-            ans = findNext(G, s, [s], p[1:])
-    return ans
-
+def getAPath(baseDir,name):
+    return os.path.join(baseDir,'output','A',name)
 
 if __name__ == "__main__":
     # baseDir = 'C:/Users/croxx/Desktop/rcv1'
@@ -96,11 +24,14 @@ if __name__ == "__main__":
     print('Loading rels...')
     rels = pickle.load(open(os.path.join(baseDir,'output','rels.pkl'),'rb'))
 
+    N = 23194
     ntext = len(texts)
     nentity = len(_entities)
     nkey = len(_keys)
 
     types = ['T','E','K']
+
+    '''
 
     edges = {}
     for i in types:
@@ -121,9 +52,9 @@ if __name__ == "__main__":
     pickle.dump(key2id,open(os.path.join(baseDir,'output','key2id.pkl'),'wb'))
     pickle.dump(entity2id,open(os.path.join(baseDir,'output','entity2id.pkl'),'wb'))
     print('Finish mapping keywords and entities.')
+    '''
 
-
-    N = 23194
+    
     '''
     print('Picking train set...')
     train_ids = []
@@ -145,6 +76,7 @@ if __name__ == "__main__":
         print('train id %s' % i)
     pickle.dump(train_ids, open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'wb'))
     print('Finish picking train set.')
+    '''
     '''
     train_ids = pickle.load(open(os.path.join(baseDir,'output','train_ids.pkl'),'rb'))
     
@@ -180,49 +112,76 @@ if __name__ == "__main__":
     
     pickle.dump(edges,open(os.path.join(baseDir,'output','edges.pkl'),'wb'))
 
-
     '''
-    G = nx.Graph()
-    addTexts2G(G,texts)
-    addEntities2G(G,_entities.keys())
-    addKeywords2G(G,_keys.keys())
-    connectTextwithKeyword(G,_keys)
-    connectTextwithEntity(G,_entities)
-    pickle.dump(G,open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'wb'))
-    
-    
-    G = pickle.load(open(os.path.join(baseDir,'output','G-TEK-None.pkl'),'rb'))
-    es = set()
-    for e in _entities.keys():
-        es.add(e[0])
-    for e,rs in rels.items():
-        for r in rs:
-            if r in es:
-                n1,n2 = nameN((e,None),'entity'),nameN((r,None),'entity')
-                if n1 in G.nodes and n2 in G.nodes:
-                    print('Add Edge < %s , %s >' % (nameN((e,None),'entity'),nameN((r,None),'entity')))
-                    G.add_edge(nameN((e,None),'entity'),nameN((r,None),'entity'))
-                else:
-                    print('No Edge < %s , %s >' % (nameN((e,None),'entity'),nameN((r,None),'entity')))
-            if r.lower() in _keys:
-                n1,n2 = nameN((e,None),'entity'),nameN(r.lower(),'keyword')
-                if n1 in G.nodes and n2 in G.nodes:
-                    print('Add Edge < %s , %s >' % (nameN((e,None),'entity'),nameN(r.lower(),'keyword')))
-                    G.add_edge(nameN((e,None),'entity'),nameN(r.lower(),'keyword'))
-                else:
-                    print('No Edge < %s , %s >' % (nameN((e,None),'entity'),nameN(r.lower(),'keyword')))
-    
-    for key in _keys.keys():
-        for synset in wn.synsets(key):
-            for word in synset.lemma_names():
-                if word.lower() != key and word.lower() in _keys:
-                    n1,n2 = nameN(key,'keyword'),nameN(word.lower(),'keyword')
-                    if n1 in G.nodes and n2 in G.nodes:
-                        print('Add Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
-                        G.add_edge(nameN(key,'keyword'),nameN(word.lower(),'keyword'))
-                    else:
-                        print('No Edge < %s , %s >' % (nameN(key,'keyword'),nameN(word.lower(),'keyword')))
-    pickle.dump(G,open(os.path.join(baseDir,'output','G.pkl'),'wb'))
-    '''
+    # Create and Save Initial A matrix.
 
+    edges = pickle.load(open(os.path.join(baseDir,'output','edges.pkl'),'rb'))
+
+    TT = np.zeros((N,N))
+    np.save(getAPath(baseDir,'TT'),TT)
+    del TT
+    gc.collect()
+
+    EE = np.zeros((nentity,nentity))
+    for pair in edges[('E','E')]:
+        x, y = pair
+        EE[x,y] = 1
+    np.save(getAPath(baseDir,'EE'),EE)
+    del EE
+    gc.collect()
+
+    KK = np.zeros((nkey,nkey))
+    for pair in edges[('K','K')]:
+        x, y = pair
+        KK[x,y] = 1
+    np.save(getAPath(baseDir,'KK'),KK)
+    del KK
+    gc.collect()
+
+    TE = np.zeros((N,nentity))
+    for pair in edges[('T','E')]:
+        x, y = pair
+        TE[x,y] = 1
+    np.save(getAPath(baseDir,'TE'),TE)
+    del TE
+    gc.collect()
+
+    ET = np.zeros((nentity,N))
+    for pair in edges[('E','T')]:
+        x, y = pair
+        ET[x,y] = 1
+    np.save(getAPath(baseDir,'ET'),ET)
+    del ET
+    gc.collect()
+
+    TK = np.zeros((N,nkey))
+    for pair in edges[('T','K')]:
+        x, y = pair
+        TK[x,y] = 1
+    np.save(getAPath(baseDir,'TK'),TK)
+    del TK
+    gc.collect()
+
+    KT = np.zeros((nkey,N))
+    for pair in edges[('K','T')]:
+        x, y = pair
+        KT[x,y] = 1
+    np.save(getAPath(baseDir,'KT'),KT)
+    del KT
+    gc.collect()
+
+    EK = np.zeros((nentity,nkey))
+    for pair in edges[('E','K')]:
+        x, y = pair
+        EK[x,y] = 1
+    np.save(getAPath(baseDir,'EK'),EK)
+    del EK
+    gc.collect()
     
+    KE = np.zeros((nkey,nentity))
+    for pair in edges[('K','E')]:
+        x, y = pair
+        KE[x,y] = 1
+    np.save(getAPath(baseDir,'KE'),KE)
+    del KE
+    gc.collect()
