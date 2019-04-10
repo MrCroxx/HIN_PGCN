@@ -116,6 +116,10 @@ if __name__ == "__main__":
     # Create and Save Initial A matrix.
 
     edges = pickle.load(open(os.path.join(baseDir,'output','edges.pkl'),'rb'))
+    train_ids = pickle.load(open(os.path.join(baseDir,'output','train_ids.pkl'),'rb'))
+
+    tid2index = { tid:index for index,tid in enumerate(train_ids) }
+
 
     print('Creating TT...')
     TT = np.zeros((N,N))
@@ -145,6 +149,7 @@ if __name__ == "__main__":
     TE = np.zeros((N,nentity))
     for pair in edges[('T','E')]:
         x, y = pair
+        x = tid2index[x]
         TE[x,y] = 1
     np.save(getAPath(baseDir,'TE'),TE)
     del TE
@@ -154,6 +159,7 @@ if __name__ == "__main__":
     ET = np.zeros((nentity,N))
     for pair in edges[('E','T')]:
         x, y = pair
+        y = tid2index[y]
         ET[x,y] = 1
     np.save(getAPath(baseDir,'ET'),ET)
     del ET
@@ -163,6 +169,7 @@ if __name__ == "__main__":
     TK = np.zeros((N,nkey))
     for pair in edges[('T','K')]:
         x, y = pair
+        x = tid2index[x]
         TK[x,y] = 1
     np.save(getAPath(baseDir,'TK'),TK)
     del TK
@@ -172,6 +179,7 @@ if __name__ == "__main__":
     KT = np.zeros((nkey,N))
     for pair in edges[('K','T')]:
         x, y = pair
+        y = tid2index[y]
         KT[x,y] = 1
     np.save(getAPath(baseDir,'KT'),KT)
     del KT
