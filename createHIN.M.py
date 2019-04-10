@@ -124,6 +124,7 @@ if __name__ == "__main__":
 
 
     N = 23194
+    '''
     print('Picking train set...')
     train_ids = []
     _cs = pickle.load(
@@ -144,6 +145,8 @@ if __name__ == "__main__":
         print('train id %s' % i)
     pickle.dump(train_ids, open(os.path.join(baseDir, 'output', 'train_ids.pkl'),'wb'))
     print('Finish picking train set.')
+    '''
+    train_ids = pickle.load(open(os.path.join(baseDir,'output','train_ids.pkl'),'rb'))
     
     for e,tids in _entities.items():
         e = e[0]
@@ -164,7 +167,7 @@ if __name__ == "__main__":
             if e in entity2id and r in entity2id:
                 edges[('E','E')].append((entity2id[e],entity2id[r]))
                 edges[('E','E')].append((entity2id[r],entity2id[e]))
-            if r.lower() in key2id:
+            if e in entity2id and r.lower() in key2id:
                 edges[('E','K')].append((entity2id[r],key2id[r.lower()]))
                 edges[('K','E')].append((key2id[r.lower()],entity2id[r]))
 
