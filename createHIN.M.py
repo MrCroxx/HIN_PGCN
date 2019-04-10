@@ -168,8 +168,8 @@ if __name__ == "__main__":
                 edges[('E','E')].append((entity2id[e],entity2id[r]))
                 edges[('E','E')].append((entity2id[r],entity2id[e]))
             if e in entity2id and r.lower() in key2id:
-                edges[('E','K')].append((entity2id[r],key2id[r.lower()]))
-                edges[('K','E')].append((key2id[r.lower()],entity2id[r]))
+                edges[('E','K')].append((entity2id[e],key2id[r.lower()]))
+                edges[('K','E')].append((key2id[r.lower()],entity2id[e]))
 
     for key in _keys.keys():
         for synset in wn.synsets(key):
